@@ -156,7 +156,7 @@ $Setup->addAttribute('catalog_product', 'project_id',
 						array(
 								'group'							=> 'FlickRocket Attributes',
 								'input'							=> 'select',
-								'type'							=> 'int',
+								'type'							=> 'text',
 								'label'							=> 'Project ID',
 								'backend'						=> '',
 								'visible'						=> 1,

@@ -31,21 +31,47 @@
 	<acl>
         <resources>
             <admin>
-                <children>
-                    <system>
-                        <children>
+				<children>
+					<acegmbh_flux translate="title" module="flux">
+						<title>FlickRocket Configuration</title>
+						<sort_order>900</sort_order>
+						<children>
+							<flickrocket_admin module="flux">
+								<title>FlickRocket Admin</title>
+								<sort_order>10</sort_order>
+							</flickrocket_admin>	
+							<flickrocket_upload module="flux">
+								<title>FlickRocket Content Upload</title>
+								<sort_order>20</sort_order>
+							</flickrocket_upload>	
+						</children>
+					</acegmbh_flux>
+				</children>
+				<children>
+					<sales>
+						<children>
+							<flux translate="title" module="flux">
+								<title>FlickRocket SOAP Log</title>
+								<sort_order>900</sort_order>
+							</flux>			
+						</children>
+					</sales>
+				</children>
+				<children>
+					<system>
+						<children>
 							<config>
 								<children>
-									<acegmbh_flux>
-										<title>FlickRocket Configuration</title>
-										<sort_order>900</sort_order>
-									</acegmbh_flux>
+									<acegmbh_flux translate="title" module="flux">
+										<title>Flickrocket General Settings</title>
+										<sort_order>999</sort_order>
+									</acegmbh_flux>			
 								</children>
 							</config>
-                        </children>
-                    </system>
-                </children>
-            </admin>
-        </resources>
+						</children>
+					</system>
+				</children>				
+			</admin>
+		</resources>
     </acl>
 </config>
