@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Acegmbh_Flux>
-			<version>0.1.7</version>
+			<version>0.1.8</version>
 		</Acegmbh_Flux>
 	</modules>
 	<admin>
@@ -24,6 +24,19 @@
                 </flux>
             </updates>
         </layout>
+        
+     <events>
+    <checkout_submit_all_after>
+	<observers>
+		<Acegmbh_Flux>
+			<type>singleton</type>
+			<class>flux/observer</class>
+			<method>placeOrder</method>
+		</Acegmbh_Flux>
+	</observers>
+    </checkout_submit_all_after>									
+  </events>
+        
 	</adminhtml>
  	
 	<frontend>
@@ -104,6 +117,11 @@
 			<flux>
 				<class>Acegmbh_Flux_Block</class>
 			</flux>
+			<downloadable>
+				<rewrite>
+				  <customer_products_list>Acegmbh_Flux_Block_Customer_Products_List</customer_products_list>
+				</rewrite>
+			</downloadable>
 		</blocks>
 		<helpers>
 			<flux>
@@ -149,7 +167,36 @@
 				</observers>
 			</customer_save_after>	
 			
-										
+			<customer_customer_authenticated>
+				<observers>
+					<Acegmbh_Flux>
+						<type>singleton</type>
+						<class>flux/observer</class>
+						<method>changeOldPassword</method>
+					</Acegmbh_Flux>
+				</observers>
+			</customer_customer_authenticated>
+			
+			<adminhtml_sales_order_create_process_data_before>
+				<observers>
+					<Acegmbh_Flux>
+						<type>singleton</type>
+						<class>flux/observer_order</class>
+						<method>beforeAdminOrder</method>
+					</Acegmbh_Flux>
+				</observers>
+			</adminhtml_sales_order_create_process_data_before>
+			
+			<controller_action_layout_load_before>
+				<observers>
+					<Acegmbh_Flux>
+						<type>singleton</type>
+						<class>flux/observer_template</class>
+						<method>setTemplate</method>
+					</Acegmbh_Flux>
+				</observers>
+			</controller_action_layout_load_before>
+													
 		</events>
 		
 		 <catalog>
@@ -175,6 +222,7 @@
 	            <flux_email>sandbox@flickrocket.com</flux_email>
 	            <flux_password>sandbox1971</flux_password>
 	            <flux_wsdl>http://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL</flux_wsdl>
+	            <flux_template>1</flux_template>
 	        </flux>
 	    </acegmbh_flux>
 	</default>	

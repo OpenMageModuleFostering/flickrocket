@@ -57,15 +57,25 @@
                             <label>Environment</label>
                             <frontend_type>select</frontend_type>
                             <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
-							<source_model>
-								acegmbh_flux/adminhtml_system_config_source_wsdlurls
-						    </source_model>	
+				<source_model>
+				acegmbh_flux/adminhtml_system_config_source_wsdlurls
+			        </source_model>	
                             <sort_order>4</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment>Select between live (productive) and sandbox (testing)</comment>
                         </flux_wsdl>
+                         <flux_template translate="label">
+                            <label>Access system</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>acegmbh_flux/adminhtml_system_config_source_access</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </flux_template>
+                        
                     </fields>
                 </flux>
             </groups>

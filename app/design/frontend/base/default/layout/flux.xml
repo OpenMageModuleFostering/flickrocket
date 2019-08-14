@@ -27,10 +27,24 @@
 
 -->
 <layout version="0.1.0">
-    <downloadable_customer_products translate="label">
+    <!--downloadable_customer_products translate="label">
 		<remove name="downloadable_customer_products_list"></remove>
 		<reference name="my.account.wrapper">
 		    <block type="core/template" name="dlmlinks" template="flux/dlmanagerlinks.phtml"></block>
 		</reference>
-    </downloadable_customer_products>
+    </downloadable_customer_products -->
+    
+    <flickRocket_only translate="label">
+		<remove name="downloadable_customer_products_list"></remove>
+		<reference name="my.account.wrapper">
+		    <block type="core/template" name="dlmlinks" template="flux/dlmanagerlinks.phtml"></block>
+		</reference>
+    </flickRocket_only>
+    
+    <flickRocket_and_legacy translate="label">
+		<reference name="downloadable_customer_products_list">
+		    <action method="setTemplate"><template>flux/list.phtml</template></action>
+		</reference>
+    </flickRocket_and_legacy>
+       
 </layout>

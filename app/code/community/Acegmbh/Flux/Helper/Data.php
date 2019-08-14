@@ -225,10 +225,19 @@ class Acegmbh_Flux_Helper_Data
 		
 		$EMail = $Doc->createElement('EMail', $Customer->getEmail());
 		$_Order->appendChild($EMail);
-		
-		$Password = $Doc->createElement('PasswordHash', $Customer->getPasswordHash());
-		$_Order->appendChild($Password);
-		
+		/**********************************
+		* for admin fixed salt :MD
+		* for user plain password
+		*/
+		if (Mage::app()->getStore()->isAdmin()) {
+		 $Password = $Doc->createElement('PasswordHash', $Customer->getPasswordHash());
+		 $_Order->appendChild($Password);
+		}
+		else
+		{
+		  $Password = $Doc->createElement('Password', self::getFluxCustomerPassword());
+		  $_Order->appendChild($Password);
+		}
 		$Items = $Doc->createElement('Items');
 		$_Order->appendChild($Items);
 
@@ -458,6 +467,86 @@ class Acegmbh_Flux_Helper_Data
 			return 'SOAP_EXCEPTION';
 		}
 	}	
+	
+	
+	 /**
+	 * @param string $strEmail
+	 * @param string $strPassword
+	 * @param bool $bPwHash - true means, the password is given as a hash
+	 * @return 	0,1,2 or Error code;
+	 */
+	public static function needChangePassword($strEmail, $strPassword, $bPwHash = true )
+	{
+		self::_log('needChangePassword');
+	
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$SoapClient = new SoapClient($wsdl, array('soap_version'	=> SOAP_1_2,
+							'trace'			=> true,
+							'classmap'		=> array('CheckUserExistsResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_CheckUserExists'),
+							'cache_wsdl'	=> WSDL_CACHE_NONE
+							)
+					  );
+	
+		$soapRequest = array();
+		$soapRequest['EMail'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
+		$soapRequest['Password'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
+	
+		$Doc = new DOMDocument('1.0', 'UTF-8');
+		$Doc->formatOutput = true;
+		$_Customer = $Doc->createElement('Customer');
+		$Doc->appendChild($_Customer);
+	
+		$EMail = $Doc->createElement('EMail', $strEmail);
+		$_Customer->appendChild($EMail);
+	
+		if( $bPwHash )
+		{
+			$Password = $Doc->createElement('PasswordHash', $strPassword);
+			$_Customer->appendChild($Password);
+		}
+		else
+		{
+			$Password = $Doc->createElement('Password', $strPassword);
+			$_Customer->appendChild($Password);
+		}
+	
+		$soapRequest['XML'] = $Doc->saveXML();
+		try
+		{
+			$Result = $SoapClient->__call('CheckUserExists', array( 'parameters' => $soapRequest ) );
+			
+			self::_log('Request:');
+			self::_log( $SoapClient->__getLastRequest() );
+			self::_log('Response:');
+			self::_log( $SoapClient->__getLastResponse() );
+			/*$ap=$Result->CheckUserExistsResult;
+			ob_start();
+			var_dump($ap);
+			$res= ob_get_clean();
+			self::_log('Result:');
+			self::_log($res);*/
+			if( $Result->CheckUserExistsResult==1 && $Result->ErrorCode==0 )
+			{
+				return 0;//email and password are matched
+			}
+			if( $Result->ErrorCode==-5 )
+			{
+				return 1 ;//email matched but password not matched
+			}
+			if($Result->ErrorCode==-1)
+			{
+				return 2;// Invalid User
+			}
+			return $Result->ErrorCode;
+						
+		}
+		catch (SoapFault $Exception)
+		{
+			self::_log($Exception->getMessage());
+                         throw new Exception($Exception->getMessage());
+			 return 'SOAP_EXCEPTION';
+		}
+	}
 	
 	/**
 	 * 
@@ -743,14 +832,14 @@ class Acegmbh_Flux_Helper_Data
 	
 	private static function _logflux( $iIdOrder, $iIdStore, $iIdCustomer, $strRequest, $strResponse, $iErrorCode )
 	{
-		/*$FluxOrders = Mage::getModel('flux/orders');
+		$FluxOrders = Mage::getModel('flux/orders');
 		$FluxOrders->setOrderId( $iIdOrder );
 		$FluxOrders->setStoreId( $iIdStore );
 		$FluxOrders->setCustomerId( $iIdCustomer );
 		$FluxOrders->setRequest( $strRequest );
 		$FluxOrders->setResponse( $strResponse );
 		$FluxOrders->setError(self::$errors[$iErrorCode]);
-		$FluxOrders->save();*/
+		$FluxOrders->save();
 	}
 	
 	public  static function prepareLoginEx( $strCustomerMail, $strCustomerPasswordHash)
@@ -806,5 +895,23 @@ class Acegmbh_Flux_Helper_Data
 	public static function getErrorMessage($code)
 	{	$errors=self::$errors;
 		return isset($errors[$code])?$errors[$code]:null;
+	}
+	
+	/***/
+	/*Logged in user's password for communication with flux 
+	/***/
+	public static function setFluxCustomerPassword($strPassword)
+	{
+		$_SESSION['flux_customer_password'] = $strPassword;
+	}
+	
+	
+	/***/
+	/*Get user's password for communication with flux 
+	/***/
+	
+	public static function getFluxCustomerPassword()
+	{
+	     return isset($_SESSION['flux_customer_password'])?$_SESSION['flux_customer_password']:null;
 	}
 }
