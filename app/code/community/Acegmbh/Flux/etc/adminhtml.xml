@@ -1,0 +1,51 @@
+<config>
+	<menu>
+		<sales>
+			<children>
+				<flux module="flux">
+					<title>FlickRocket SOAP Log</title>
+					<sort_order>900</sort_order>
+					<action>flux/adminhtml_flux</action>
+				</flux>
+			</children>
+		</sales>
+		<flickrocket module="flux">
+			<title>Flickrocket</title>
+			<sort_order>900</sort_order>  
+			<children>
+				<flickrocket_admin module="flux">
+					<title>FlickRocket Admin</title>
+					<sort_order>100</sort_order>
+					<action>flux/adminhtml_admin</action>
+				</flickrocket_admin>		
+			</children>
+			<children>
+				<flickrocket_upload module="flux">
+					<title>FlickRocket Content Upload</title>
+					<sort_order>200</sort_order>
+					<action>flux/adminhtml_upload</action>
+				</flickrocket_upload>				
+			</children>
+		</flickrocket>
+	</menu>
+	<acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+							<config>
+								<children>
+									<acegmbh_flux>
+										<title>FlickRocket Configuration</title>
+										<sort_order>900</sort_order>
+									</acegmbh_flux>
+								</children>
+							</config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

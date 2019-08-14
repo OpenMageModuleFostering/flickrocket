@@ -1,0 +1,33 @@
+;; FlickRocket SOAP Log
+"FlickRocket SOAP Log","FlickRocket SOAP Log"
+"ID","ID"
+"Order ID","Order ID"
+"Store ID","Store ID"
+"Customer ID","Customer ID"
+"Request","Request"
+"Response","Response"
+"Error","Error"
+"Order Date","Order Date"
+
+;; Infos while creating a user
+"Ihre E-Mail-Adresse ist bereits in Flux angelegt. Bitte verwenden Sie das Passwort aus Ihrem Flux Account.","Your E-Mail Address is already registered at Flickrocket/FluxPlayer. Please use the password from your existing account."
+
+;; backend texts
+"Flickrocket Extension","Flickrocket Extension"
+"General Settings","General Settings"
+"Configuration","Configuration"
+"Company ID","Company ID"
+"Unique Company ID (see FlickRocket -> Company -> Company data)","Unique Company ID (see FlickRocket -> Company -> Company data)"
+"Theme ID","Theme ID"
+"Unique Theme ID (see FlickRocket -> Shop -> Themes)","Unique Theme ID (see FlickRocket -> Shop -> Themes)"
+"Email Address","Email Address"
+"Email of user registered with FlickRocket with Shop Management permission","Email of registered user with FlickRocket with Shop Management permission"
+"Password","Password"
+"May be empty for generic sandbox environment","May be empty for generic sandbox environment"
+"Environment","Environment"
+"Select between live (productive) and sandbox (testing)","Select between live (productive) and sandbox (testing)"
+
+;; adminhtml page content
+"Content can be uploaded by using one of the following options:";"Content can be uploaded by using one of the following options:"
+"Web based uploader";"Web based uploader"
+"Download desktop software (Windows / MacOSX)";"Download desktop software (Windows / MacOSX)"

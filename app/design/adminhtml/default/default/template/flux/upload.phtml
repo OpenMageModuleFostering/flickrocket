@@ -1,0 +1,84 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+
+if ( Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl') == "http://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL"){
+
+	$livemode = false;
+	if ("" == Mage::getStoreConfig('acegmbh_flux/flux/flux_email')){
+	
+		$fluxUser = "sandbox@flickrocket.com";
+	
+	} else {
+
+		$fluxUser = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
+	
+	}
+
+	if ("" == Mage::getStoreConfig('acegmbh_flux/flux/flux_password')){
+	
+		$fluxPW = "sandbox1971";
+	
+	} else {
+
+		$fluxPW = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
+	
+	}
+	
+	$fluxURL = "http://sandbox.flickrocket.com/FlickRocketContentTools/?name=" . $fluxUser . "&password=" . $fluxPW . "&theme=1&type=1";
+
+} else {
+
+	$livemode = true;
+	$fluxUser = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
+	$fluxPW = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
+	$fluxURL = "http://www.flickrocket.com/FlickRocketContentTools/?name=" . $fluxUser . "&password=" . $fluxPW . "&theme=1&type=1";
+	
+}
+
+//HTML output
+?>
+
+
+	<script type="text/javascript">
+	function popup(URL){
+		fenster = window.open(URL, 'FlickRocketContentTools', 'width=702,height=516,resizable=no,scrollbars=no,toolbar=no,status=no,location=no');
+		fenster.focus();
+		return false;
+	}
+	</script>
+	<br /><br />
+	<div Style="text-align:center;">
+	<p><h3><?php echo Mage::helper('flux')->__('Content can be uploaded by using one of the following options:');?></h3></p>
+	<br />
+
+	<a href="<?php echo $fluxURL;?>&externaltype=1&theme=" . Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id')" onclick="return popup(this.href)"><img src="<?php echo $this->getSkinUrl('images/flux/CloudIcon_Html5.png') ?>" alt="Html5"></a>
+	<p><h4><?php echo Mage::helper('flux')->__('Web based uploader');?></h4></p>
+
+	<a href="http://www.flickrocket.com/app/download_components.aspx?name=<?php echo $fluxUser; ?>&password=<?php echo $fluxPW ; ?>&component=FlickRocket" onclick="popup(this.href)"><img style="padding:5px;" src="<?php echo $this->getSkinUrl('images/flux/CloudIcon_Win.png') ?>" alt="Windows"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.flickrocket.com/app/download_components.aspx?name=<?php echo $fluxUser; ?>&password=<?php echo $fluxPW ; ?>&component=FlickRocket" onclick="popup(this.href)"><img style="padding:5px;" src="<?php echo $this->getSkinUrl('images/flux/CloudIcon_Apple.png') ?>" alt="Mac"></a>
+	<p><h4><?php echo Mage::helper('flux')->__('Download desktop software (Windows / MacOSX)');?></h4></p>	
+	</div>

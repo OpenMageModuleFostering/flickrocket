@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <Acegmbh_Flux>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Acegmbh_Flux>
+    </modules>
+</config>
