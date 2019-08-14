@@ -3,7 +3,7 @@
     "type": "magento-module",
     "license": "OSL-v3.0",
     "homepage": "",
-    "description": "This extension enables you to sell and rent (optionally DRM protected) digital content such as DVDs (incl. all menus, bonus material, etc.), video (HD+SD), audio books, ebooks  (epub and PDF) and packaged content such as HTML, Flash, images, etc. ",
+    "description": "This extension enables you to sell and rent (optionally DRM protected) digital content such as DVDs (incl. all menus, bonus material, etc.), video (HD+SD), audio books, ebooks  (epub and PDF) and packaged content such as HTML, Flash, images, etc.",
     "authors": [
     {
         "name": "Volkmar Breitfeld",

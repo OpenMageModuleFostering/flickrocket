@@ -26,6 +26,7 @@
                         <flux_theme_id translate="label,comment">
                             <label>Theme ID</label>
                             <frontend_type>text</frontend_type>
+                            <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -35,6 +36,7 @@
                         <flux_email translate="label,comment">
                             <label>Email Address</label>
                             <frontend_type>text</frontend_type>
+                            <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -44,6 +46,7 @@
                         <flux_password translate="label,comment">
                             <label>Password</label>
                             <frontend_type>password</frontend_type>
+                            <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
                             <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -53,6 +56,7 @@
                         <flux_wsdl translate="label,comment">
                             <label>Environment</label>
                             <frontend_type>select</frontend_type>
+                            <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
 							<source_model>
 								acegmbh_flux/adminhtml_system_config_source_wsdlurls
 						    </source_model>	

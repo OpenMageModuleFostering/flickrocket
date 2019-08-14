@@ -40,7 +40,7 @@ class Acegmbh_Flux_Model_Adminhtml_System_Config_Source_Projectids
     
     
     public function getOptionText($value)
-    {	
+    {	echo $value;
     	$arr = Mage::helper('flux')->getProjects();
     	foreach( $arr as $project )
     	{

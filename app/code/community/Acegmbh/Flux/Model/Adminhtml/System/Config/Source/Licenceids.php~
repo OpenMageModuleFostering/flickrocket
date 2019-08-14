@@ -31,7 +31,7 @@ class Acegmbh_Flux_Model_Adminhtml_System_Config_Source_Licenceids
     }
     
     
-    public function getOptionText($value)
+    public function getOptionText($value);
     {
     	$arr = Mage::helper('flux')->getLicenses();
     	foreach( $arr as $license )

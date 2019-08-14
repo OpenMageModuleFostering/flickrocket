@@ -35,8 +35,8 @@ class Acegmbh_Flux_Model_Observer
 		$Customer = Mage::getModel('customer/customer')->load($Order->getCustomerId());
 		
 		$strEmail = $Customer->getEmail();
-		$strPassword = $_SESSION['flux_customer_password'];
-		$strHashedPw = Mage::getModel('customer/customer')->hashPassword($strPassword);
+		//$strPassword = $_SESSION['flux_customer_password'];
+		$strHashedPw =$Customer->getPasswordHash();//$strPassword;// Mage::getModel('customer/customer')->hashPassword($strPassword);
 		$iTransactionId = '99999' . $Customer->getId();
 		
 		self::_log('email: ' . $strEmail);
@@ -47,7 +47,7 @@ class Acegmbh_Flux_Model_Observer
 			$strResultCreate = Mage::helper('flux')->createShopUser($iTransactionId,
 																	$strEmail,
 																	$strHashedPw,
-																	true );
+																	false );
 			if( $strResultCreate=='OK' )
 			{
 				// User erfolgreich neu angelegt, oder User mit gleichem Passwort bereits in Flux verfügbar
@@ -64,7 +64,7 @@ class Acegmbh_Flux_Model_Observer
 																					$strPassword,
 																					false,
 																					$strHashedPw,
-																					true );
+																					false );
 				}
 				elseif( $strResultCheck=='PASSWORD_WRONG' )
 				{
@@ -95,7 +95,7 @@ class Acegmbh_Flux_Model_Observer
 		 				
 		$strEmail = $Customer->getEmail();
 		$strPassword = $Customer->getPassword();
-		$strHashedPw = Mage::getModel('customer/customer')->hashPassword($strPassword);
+		$strHashedPw =$strPassword;// Mage::getModel('customer/customer')->hashPassword($strPassword);
 		$iTransactionId = '99999' . $Customer->getId();
 		
 		self::_log('email: ' . $strEmail);
@@ -104,7 +104,7 @@ class Acegmbh_Flux_Model_Observer
 		$strResultCreate = Mage::helper('flux')->createShopUser($iTransactionId,
 																$strEmail,
 																$strHashedPw,
-																true );
+																false );
 		if( $strResultCreate=='OK' )
 		{
 			// User erfolgreich neu angelegt, oder User mit gleichem Passwort bereits in Flux verfügbar			
@@ -121,7 +121,7 @@ class Acegmbh_Flux_Model_Observer
 																				$strPassword,
 																				false,
 																				$strHashedPw,
-																				true );
+																				false );
 			}
 			elseif( $strResultCheck=='PASSWORD_WRONG' )
 			{
@@ -171,29 +171,121 @@ class Acegmbh_Flux_Model_Observer
 	{
 		self::_log('changeFluxPw');
 		
-		
 		// Check if it happens somewhere in the customer module
 		$request = Mage::app()->getFrontController()->getRequest();
 		$module = $request->getModuleName();
 		//$controller = $request->getControllerName();
 		//$action = $request->getActionName();
 		if ( 'customer' != $module ) return;
-				
+
 		$event              = $Observer->getEvent();
 		$customer           = $event->getCustomer();
 		$postData           = Mage::app()->getRequest()->getPost();
 		if($customer instanceof Mage_Customer_Model_Customer && !$customer->isObjectNew()) 
 		{
 			if( $postData['change_password'] == 1 && $postData['current_password'] != $postData['password'] ) 
-			{
+			{       
 				Mage::helper('flux')->changeCustomerPassword(	$customer->getEmail(),
-																$postData['current_password'],
-																false,
-																$postData['password'],
-																false );
+										$postData['current_password'],
+										false,
+										$postData['password'],
+										false );
 			}
 		}
 		return $this;
+	}
+	
+  	public function checkoutCartProductAddAfter(Varien_Event_Observer $observer)
+	{	
+		$item = $observer->getQuoteItem();
+		$productId=$item->getProduct()->getId();
+		
+		$product = Mage::getModel('catalog/product')->load($productId);
+
+		$attributeSetModel = Mage::getModel("eav/entity_attribute_set");
+		$attributeSetModel->load( $product->getAttributeSetId() );
+		$attributeSetName  = $attributeSetModel->getAttributeSetName();
+		
+		if($attributeSetName=='FlickRocketProduct')
+		{
+			$license=null;
+			$project=null;
+			$projectId=$product->getProjectId();
+			$licenseId=$product->getLicenseId();
+			
+			$licenses = Mage::helper('flux')->getLicenses();
+			$projects = Mage::helper('flux')->getProjects();
+			
+			$options=array();
+			foreach($licenses as $license)
+			{
+				if($license->ID==$licenseId)
+				{				   
+				   $options[] = array(
+				        'label' => 'Licence',
+				        'value' => $license->Name,
+				        'print_value' => $license->Name,
+				        'option_id' => '133',
+		            		);
+				   
+				   
+				}
+			}
+			
+			$infoArr = array();
+		
+			if ($info = $item->getProduct()->getCustomOption('info_buyRequest')) 
+			{
+			   $infoArr = unserialize($info->getValue());
+			
+				/////////////////////////////////////////
+			
+			
+			
+			    $additionalOptions = $options;
+			
+			     
+			
+			    $item->addOption(array(
+				'code' => 'additional_options',
+				'value' => serialize($additionalOptions),
+			    ));
+			
+			    $infoArr['additional_options'] = $additionalOptions;
+
+		            $info->setValue(serialize($infoArr));
+		            $item->addOption($info);
+                    }
+		    // Update info_buyRequest to reflect changes
+		    /*if ($infoArr &&
+		        isset($infoArr['options']) &&
+		        isset($infoArr['options'][$option['option_id']]))
+		       {
+		        // Remove real custom option
+		        unset($infoArr['options'][$option['option_id']]);
+
+		        // Add replacement additional option for reorder (see above)
+		        $infoArr['additional_options'] = $additionalOptions;
+
+		        $info->setValue(serialize($infoArr));
+		        $item->addOption($info);
+		    }*/
+           
+           }//attributeName
+            
+ 	 }//function
+	
+
+	
+	public function salesConvertQuoteItemToOrderItem(Varien_Event_Observer $observer)
+	{
+		$quoteItem = $observer->getItem();
+		if ($additionalOptions = $quoteItem->getOptionByCode('additional_options')) {
+			$orderItem = $observer->getOrderItem();
+			$options = $orderItem->getProductOptions();
+			$options['additional_options'] = unserialize($additionalOptions->getValue());
+			$orderItem->setProductOptions($options);
+		}
 	}
 		
 }

@@ -1,6 +1,6 @@
 <config>
 	<menu>
-		<sales>
+		<!--<sales>
 			<children>
 				<flux module="flux">
 					<title>FlickRocket SOAP Log</title>
@@ -8,7 +8,7 @@
 					<action>flux/adminhtml_flux</action>
 				</flux>
 			</children>
-		</sales>
+		</sales> -->
 		<flickrocket module="flux">
 			<title>Flickrocket</title>
 			<sort_order>900</sort_order>  

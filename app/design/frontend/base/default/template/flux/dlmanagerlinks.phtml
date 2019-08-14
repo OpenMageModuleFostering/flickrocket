@@ -40,8 +40,8 @@
 	}
 
 	$Customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getId());
-	
-	$targetURL = Mage::helper('flux')->prepareLoginEx( $Customer->getEmail(), $Customer->getPasswordHash()) . "&externaltype=1&theme=" . Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id');
+        $url=Mage::helper('flux')->prepareLoginEx( $Customer->getEmail(),$Customer->getPasswordHash());
+	$targetURL = $url. "&externaltype=1&theme=" . Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id');
 	$targetScheme = parse_url($targetURL, PHP_URL_SCHEME);
 	if (is_null($targetScheme))
 	{
@@ -52,7 +52,18 @@
 		
 		$targetURL = $scheme . "://" . $targetURL;
 	}
-	
-	echo "<iframe src=\"" . $targetURL . "\" frameBorder=\"0\" width=\"100%\" height=\"1600px\"></iframe>";
+       // echo $url;
+	if($url!='SOAP_EXCEPTION' && $url!=-1 && $url!=-2 && $url!=-3 && $url!=-4 && $url!=-5 )
+        {
+            echo "<iframe src=\"" . $targetURL . "\" frameBorder=\"0\" width=\"100%\" height=\"1600px\"></iframe>";
+        }
+        else
+        {  $error=Mage::helper('flux')->getErrorMessage( $url);  
+           //$error=isset($errors[$url])?$errors[$url]:$this->__('Some error occurerd.');
+             
+            ?>
+        <ul class="messages"><li class="error-msg"><ul><li><span><?php echo $error?></span></li></ul></li></ul>
+<?php
+        }
 
 ?>

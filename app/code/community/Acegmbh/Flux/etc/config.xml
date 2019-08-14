@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Acegmbh_Flux>
-			<version>0.1.0</version>
+			<version>0.1.7</version>
 		</Acegmbh_Flux>
 	</modules>
 	<admin>
@@ -147,8 +147,26 @@
 						<method>changeFluxPw</method>
 					</Acegmbh_Flux>
 				</observers>
-			</customer_save_after>					
+			</customer_save_after>	
+			
+										
 		</events>
+		
+		 <catalog>
+            <product>
+                <type>
+                    <bundle translate="label" module="bundle">
+                        <allowed_selection_types>
+                            <downloadable/>
+                        </allowed_selection_types>
+                    </bundle>
+                </type>
+            </product>
+        </catalog>
+		
+		
+		
+		
 	</global>
 	<default>
 	    <acegmbh_flux>
