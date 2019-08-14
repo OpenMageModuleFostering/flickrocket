@@ -1,0 +1,47 @@
+<?php
+$fluxPW =null;
+$fluxUser=null;
+$fluxURL ='#';
+
+if ( Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl') == "http://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL"){
+
+	$livemode = false;
+	if ("" == Mage::getStoreConfig('acegmbh_flux/flux/flux_email')){
+	
+		$fluxUser = "sandbox@flickrocket.com";
+	
+	} else {
+
+		$fluxUser = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
+	
+	}
+
+	if ("" == Mage::getStoreConfig('acegmbh_flux/flux/flux_password')){
+	
+		$fluxPW = "sandbox1971";
+	
+	} else {
+
+		$fluxPW = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
+	
+	}
+	
+	$fluxURL = "https://sandbox.flickrocket.com/FlickRocketContentTools/?name=" . $fluxUser . "&password=" . $fluxPW . "&theme=1&type=1";
+
+} else {
+
+	$livemode = true;
+	$fluxUser = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
+	$fluxPW = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
+	$fluxURL = "https://www.flickrocket.com/FlickRocketContentTools/?name=" . $fluxUser . "&password=" . $fluxPW . "&theme=1&type=1";
+	
+}
+?>
+<tr>
+    <td class="label"><label for="project_wizard"><?php echo $this->__('Product Wizard')?></label></td>
+    <td class="value">
+        <button  class="scalable add" type="button" title="<?php echo $this->__('Product Wizard')?>" onclick='window.open("<?php echo $fluxURL ?>", "FlickRocket", "left=10,top=10,width=700,height=518,toolbar=0,resizable=1");' id="project_wizard"><span><span><span><?php echo $this->__('Product Wizard')?></span></span></span></button>  <p class="note">
+        <?php echo $this->__('Alternatively you can use the FlickRocket Content tools for desktop <a href="%s">Windows</a> / <a href="%s">MacOSX</a>',"http://www.flickrocket.com/app/download_components.aspx?component=FlickRocket Content Tools (Win)","http://www.flickrocket.com/app/download_components.aspx?component=FlickRocket Content Tools (Mac)")?>
+        
+</p></td>
+    </tr>

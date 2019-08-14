@@ -24,20 +24,22 @@
 					<show_in_store>1</show_in_store>
                     <fields>
                         <flux_theme_id translate="label,comment">
-                            <label>Theme ID</label>
-                            <frontend_type>text</frontend_type>
+                            <label>Theme</label>
+                            <frontend_type>select</frontend_type>
                             <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
-                            <sort_order>1</sort_order>
+                            <source_model>acegmbh_flux/adminhtml_system_config_source_themes</source_model>
+                            <validate>required-entry</validate>
+                            <sort_order>31</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>Unique Theme ID (see FlickRocket -> Shop -> Themes)</comment>
+                            <comment>Themes define the design and are managed in Flick Rocket.</comment>
                         </flux_theme_id>
                         <flux_email translate="label,comment">
                             <label>Email Address</label>
                             <frontend_type>text</frontend_type>
                             <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
-                            <sort_order>2</sort_order>
+                            <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -47,7 +49,7 @@
                             <label>Password</label>
                             <frontend_type>password</frontend_type>
                             <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
-                            <sort_order>3</sort_order>
+                            <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -60,21 +62,22 @@
 				<source_model>
 				acegmbh_flux/adminhtml_system_config_source_wsdlurls
 			        </source_model>	
-                            <sort_order>4</sort_order>
+                            <sort_order>40</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment>Select between live (productive) and sandbox (testing)</comment>
                         </flux_wsdl>
-                         <flux_template translate="label">
+                         <!--flux_template translate="label">
                             <label>Access system</label>
                             <frontend_type>select</frontend_type>
                             <source_model>acegmbh_flux/adminhtml_system_config_source_access</source_model>
-                            <sort_order>5</sort_order>
+                            <sort_order>50</sort_order>
+                            <comment>Show only FlickRocket based content or allow user to switch to legacy</comment>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </flux_template>
+                        </flux_template-->
                         
                     </fields>
                 </flux>

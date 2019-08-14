@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <config>
+
 	<modules>
 		<Acegmbh_Flux>
 			<version>0.1.8</version>
@@ -34,7 +35,40 @@
 			<method>placeOrder</method>
 		</Acegmbh_Flux>
 	</observers>
-    </checkout_submit_all_after>									
+    </checkout_submit_all_after>	
+    
+    <adminhtml_catalog_product_edit_prepare_form>
+                <observers>
+                    <Acegmbh_Flux>
+                        <class>Acegmbh_Flux_Model_Observer_Template</class>
+                        <method>convertWizardButton</method>
+                    </Acegmbh_Flux>
+                    <Project_Option>
+                        <class>Acegmbh_Flux_Model_Observer_Template</class>
+                        <method>projectOption</method>
+                    </Project_Option>
+                </observers>
+   </adminhtml_catalog_product_edit_prepare_form>
+    
+  <model_config_data_save_before>
+  <observers>
+  	<Acegmbh_Flux>
+          <class>Acegmbh_Flux_Model_Observer_Config</class>
+          <method>validateAccountData</method>
+        </Acegmbh_Flux>
+  </observers>
+  </model_config_data_save_before>
+    		
+    		
+  <controller_action_layout_generate_blocks_after>
+                <observers>
+                    <Acegmbh_Flux_Js>
+                        <class>Acegmbh_Flux_Model_Observer_Template</class>
+                        <method>addJavascriptBlock</method>
+                    </Acegmbh_Flux_Js>
+                </observers>
+</controller_action_layout_generate_blocks_after>
+ 						
   </events>
         
 	</adminhtml>
@@ -177,6 +211,16 @@
 				</observers>
 			</customer_customer_authenticated>
 			
+			<checkout_allow_guest>
+				<observers>
+					<Acegmbh_Flux_Guest_Checkout>
+						<type>singleton</type>
+						<class>flux/observer</class>
+						<method>setAllowedGuestCheckout</method>
+					</Acegmbh_Flux_Guest_Checkout>
+				</observers>
+			</checkout_allow_guest>
+			
 			<adminhtml_sales_order_create_process_data_before>
 				<observers>
 					<Acegmbh_Flux>
@@ -196,7 +240,7 @@
 					</Acegmbh_Flux>
 				</observers>
 			</controller_action_layout_load_before>
-													
+			 										
 		</events>
 		
 		 <catalog>

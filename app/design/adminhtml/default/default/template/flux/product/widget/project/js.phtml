@@ -1,0 +1,61 @@
+  <script type="text/javascript">
+   
+    <?php $config=array();
+     $config["fluxDVD"][]=array("value"=>"0","text"=>$this->__("SD Quality"));
+     $config["fluxDVD_HD"][]=array("value"=>"0","text"=>$this->__("SD Quality"));
+     $config["fluxDVD_HD"][]=array("value"=>"1","text"=>$this->__("HD Quality"));
+     $config["ProjectCollection"][]=array("value"=>"0","text"=>$this->__("SD Quality"));
+     $config["ProjectCollection"][]=array("value"=>"1","text"=>$this->__("HD Quality"));
+     
+    ?>
+   
+   var contentConfig=<?php echo Mage::helper('core')->jsonEncode($config);?> 
+
+   function setVideoResolution()
+   {	var element = $('project_id');
+   	var contentType=null;
+   	var videoRes=$('video_resolution');
+   	for(var i=0;i<element.options.length;i++){
+            if(element.options[i].selected){
+                contentType=element.options[i].readAttribute("data-contenttype");
+            }
+        }
+        if(contentConfig[contentType])
+        {  videoRes.select('option').each(function(i){
+    			i.remove();
+		});
+           var obj=contentConfig[contentType];
+           for(var i=0;i<obj.length;i++)
+           {
+           	videoRes.insert(new Element('option', {value: obj[i].value}).update(obj[i].text));
+           }
+           $('video_resolution').up(1).show();
+        }
+        else
+        {	videoRes.select('option').each(function(i){
+    			i.remove();
+		});
+		videoRes.insert(new Element('option', {value: '0'}).update('<?php echo $this->__("SD Quality")?>'));
+        	$('video_resolution').up(1).hide();
+        }
+   }
+   function onloadVideoResolution()
+   {
+   	var element = $('project_id');
+   	var contentType=null;
+   	var videoRes=$('video_resolution');
+   	for(var i=0;i<element.options.length;i++){
+            if(element.options[i].selected){
+                contentType=element.options[i].readAttribute("data-contenttype");
+            }
+        }
+        if(!contentConfig[contentType])
+        {
+        	$('video_resolution').up(1).hide();
+        }
+   
+   }
+  Event.observe(document,"dom:loaded",onloadVideoResolution);
+  
+  $('project_id').observe('change', setVideoResolution, false);
+   </script>

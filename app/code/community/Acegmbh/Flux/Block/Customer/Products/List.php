@@ -41,7 +41,7 @@ class Acegmbh_Flux_Block_Customer_Products_List extends Mage_Downloadable_Block_
     {	
         parent::__construct();
         $session = Mage::getSingleton('customer/session');
-        $purchased = Mage::getResourceModel('downloadable/link_purchased_collection')
+        /*$purchased = Mage::getResourceModel('downloadable/link_purchased_collection')
             ->addFieldToFilter('customer_id', $session->getCustomerId())
             ->addOrder('created_at', 'desc');
         $this->setPurchased($purchased);
@@ -65,7 +65,9 @@ class Acegmbh_Flux_Block_Customer_Products_List extends Mage_Downloadable_Block_
             ->addFieldToFilter(array('link_url','link_url'), array(array('neq'=>'#'),array('null' => 'null')))
             //->addFieldToFilter('link_type', array('eq'=>'file'))
             
-            ->setOrder('item_id', 'desc');
+            ->setOrder('item_id', 'desc');*/
+          $orders = Mage::getSingleton('flux/orders');
+	  $purchasedItems=$orders->getLegacyItems();
             //echo  $purchasedItems->getSelect();
         $this->setItems($purchasedItems);
     }
@@ -147,5 +149,14 @@ class Acegmbh_Flux_Block_Customer_Products_List extends Mage_Downloadable_Block_
     {
         return Mage::getStoreConfigFlag(Mage_Downloadable_Model_Link::XML_PATH_TARGET_NEW_WINDOW);
     }
+
+
+   
+   public function getDigitalItems()
+   {
+	  $orders = Mage::getSingleton('flux/orders');
+	  $purchasedItems=$orders->getDigitalItems();
+	   return $purchasedItems;
+   }
 
 }

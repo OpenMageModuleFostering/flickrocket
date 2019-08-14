@@ -84,7 +84,12 @@ class Acegmbh_Flux_Model_Observer
 		}
 				
 		$FluxHelper = Mage::helper('flux');
-		$FluxHelper->createShopOrder($Order);		
+		$isDidgital=$FluxHelper->hasOrderDigitalItems($Order);
+		if($isDidgital)
+		{ 
+		  $FluxHelper->createShopOrder($Order);		
+		}
+		
 	} 
 	
 	public function createFluxUser(Varien_Event_Observer $Observer)
@@ -341,5 +346,15 @@ class Acegmbh_Flux_Model_Observer
 			$orderItem->setProductOptions($options);
 		}
 	}
-		
+	
+	public function setAllowedGuestCheckout(Varien_Event_Observer $observer)
+	{
+		$FluxHelper = Mage::helper('flux');
+		$isDidgital=$FluxHelper->isDidgital();
+		if($isDidgital)
+		{	$result=$observer->getResult();
+			$result->setIsAllowed(false);
+		}
+
+	}	
 }

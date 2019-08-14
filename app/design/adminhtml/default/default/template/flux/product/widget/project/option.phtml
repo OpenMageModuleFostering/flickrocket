@@ -1,0 +1,15 @@
+<tr>
+    <td class="label"><label for="project_id"><?php echo $this->__('Product')?> <span class="required">*</span></label></td>
+    <td class="value">
+      <?php $value=$this->getForm()->getElement('project_id')->getValue()?>
+       <?php $projects=$this->getProjects(); ?>
+       <select class=" required-entry required-entry select" name="product[project_id]" id="project_id">
+       <?php foreach($projects as $project) { ?>
+	<option <?php echo ($value==$project->LongProjectID)?'selected="selected"':''?> value="<?php echo $project->LongProjectID ?>" data-contenttype="<?php echo $project->ContentType?>"><?php echo $project->Name?></option>
+	<?php } ?>
+	</select>
+         <p class="note">
+        <?php echo $this->__("Identifies the product in FlickRocket");?>
+        </p>
+</td>
+    </tr>

@@ -28,25 +28,38 @@
 /**
  * @see Mage_Downloadable_Block_Customer_Products_List
  */
- $template=Mage::getStoreConfig('acegmbh_flux/flux/flux_template');
- if($template=="2")
+ //$template=Mage::getStoreConfig('acegmbh_flux/flux/flux_template');
+  $orders = Mage::getSingleton('flux/orders');
+ $legacyItems=$orders->getLegacyItems();
+ //$digitalItems=$this->getDigitalItems();
+
+ $lastItemPurchased=$orders->lastPurchasedItem();
+ 
+ if(isset($lastItemPurchased->link_url) && $lastItemPurchased->link_url!='#')
  {
 ?>
 <div class="page-title title-buttons">
     <h1><?php echo $this->__('Digital Content') ?></h1>
-    
-    <button class="button" onclick="setLocation('<?php echo $this->getUrl('flux/redirect/view/legacy/true')?>')" title="<?php echo $this->__('Legacy File Download')?>" type="button"><span><span><?php echo $this->__('Legacy File Download')?></span></span></button>
-
+    <?php 
+    if(count($legacyItems)>0) 
+    { ?>
+    <button class="button" onclick="setLocation('<?php echo $this->getUrl('*/*/*',array("content"=>"1")) //$this->getUrl('flux/redirect/view/legacy/true')?>')" title="<?php echo $this->__('Legacy File Download')?>" type="button"><span><span><?php echo $this->__('Legacy File Download')?></span></span></button>
+<?php } ?>
 <!--button class="button disabled" title="<?php echo $this->__('Access Digital Content')?>" type="button"><span><span><?php echo $this->__('Access Digital Content')?></span></span></button -->
     
 </div>
 <?php
 }
 else
-{?>
+{ ?>
 
-<div class="page-title">
-    <h1><?php echo $this->__('Digital Content') ?></h1>    
+<div class="page-title title-buttons">
+    <h1><?php echo $this->__('Digital Content') ?></h1> 
+  <?php 
+    if(count($legacyItems)>0) 
+    { ?>
+    <button class="button" onclick="setLocation('<?php echo $this->getUrl('*/*/*',array("content"=>"1")) //$this->getUrl('flux/redirect/view/legacy/true')?>')" title="<?php echo $this->__('Legacy File Download')?>" type="button"><span><span><?php echo $this->__('Legacy File Download')?></span></span></button>
+<?php } ?>
 </div>
 
 <?php 

@@ -46,10 +46,16 @@
         	//$strEmail = $data['email'];
         	//$strPassword = $data['customer_password'];
         	//$_SESSION['flux_customer_password'] = $strPassword;
+        	$strResultCheck=null;
         	
+        	$FluxHelper = Mage::helper('flux');
+		$isDidgital=$FluxHelper->isDidgital();
+		if($isDidgital)
+        	{
         	$strResultCheck = Mage::helper('flux')->checkUserExists($strEmail,
 									$strPassword,
 									false);
+		}
         	if( $strResultCheck=='PASSWORD_WRONG' )
         	{
 				$result = array('error' => 1,

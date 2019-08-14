@@ -8,16 +8,16 @@ class Acegmbh_Flux_Helper_Data
 	 */
 	const LOGFILE = "Acegmbh_Flux_Data.log";
 
-	const ERROR_INVALID_USER = 					'Invalid user or not enough rights to submit orders';
-	const ERROR_INVALID_XML = 					'Invalid XML';
+	const ERROR_INVALID_USER = 'Invalid user or not enough rights to submit orders';
+	const ERROR_INVALID_XML = 'Invalid XML';
 	const ERROR_NONEXISTANT_CUSTOMER_NODE = 	'"Customer" Node not found';
-	const ERROR_NONEXISTANT_ORDER_CUSTOMER = 	'Customer Password is wrong';
-	const ERROR_UNDEFINED = 					'Please check with FLUX';
-	const ERROR_NONEXISTANT_PASSWORD_NODE = 	'"Password" Node not found';
-	const ERROR_NONEXISTANT_NEWEMAIL_NODE = 	'"New Email" Node not found';
-	const ERROR_NONEXISTANT_CUSTOMER = 			'"Customer" not found';
-	const ERROR_EMAIL_EXISTS = 					'Email already exists';
-	const SUCCESSFUL = 							'Order Placed Successful';
+	const ERROR_NONEXISTANT_ORDER_CUSTOMER = 'Customer Password is wrong';
+	const ERROR_UNDEFINED = 'Please check with FLUX';
+	const ERROR_NONEXISTANT_PASSWORD_NODE = '"Password" Node not found';
+	const ERROR_NONEXISTANT_NEWEMAIL_NODE = '"New Email" Node not found';
+	const ERROR_NONEXISTANT_CUSTOMER = '"Customer" not found';
+	const ERROR_EMAIL_EXISTS = 	'Email already exists';
+	const SUCCESSFUL = 	'Order Placed Successful';
 	
 	/**
 	 * @var array $errors
@@ -279,6 +279,15 @@ class Acegmbh_Flux_Helper_Data
 			$Count = $Doc->createElement('Count', 1); // $_Item->getQtyToShip());
 			$Item->appendChild($Count);
 			
+			$Resolution=$Product->getVideoResolution();
+			if(empty($Resolution))
+			{
+				$Resolution='0';
+			}
+			
+			$HD = $Doc->createElement('HD', $Resolution);
+			$Item->appendChild($HD);
+			
 			$iSentItems++;
 		     }
 		}
@@ -408,7 +417,8 @@ class Acegmbh_Flux_Helper_Data
 	public static function checkUserExists($strEmail, $strPassword, $bPwHash = true )
 	{
 		self::_log('checkUserExists');
-	
+		
+		
 		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
 		$SoapClient = new SoapClient($wsdl, array('soap_version'	=> SOAP_1_2,
 							'trace'			=> true,
@@ -777,6 +787,50 @@ class Acegmbh_Flux_Helper_Data
 	}
 	/**
 	 */	
+
+	public static function getThemes()
+	{	
+		self::_log('getThemes');
+		
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$SoapClient = new SoapClient($wsdl, array('soap_version'	=> SOAP_1_2,
+							  'trace'		=> true,
+							  'classmap'		=> array('CheckUserExistsResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_GetThemes'),
+							   'cache_wsdl'	=> WSDL_CACHE_NONE
+							 )
+					   );
+		$soapRequest = array();
+		$soapRequest['EMail'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
+		$soapRequest['Password'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
+		//$soapRequest['ThemeID'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id');
+	
+		$Doc = new DOMDocument('1.0', 'UTF-8');
+		$Doc->formatOutput = true;
+		$soapRequest['XML'] = $Doc->saveXML();
+		try
+		{
+			$Result = $SoapClient->__call('GetThemes', array( 'parameters' => $soapRequest ) );
+	
+			self::_log('Request:');
+			self::_log( $SoapClient->__getLastRequest() );
+			self::_log('Response:');
+			self::_log( $SoapClient->__getLastResponse() );
+			
+			if($Result->GetThemesResult==true && $Result->ErrorCode==0 )
+			{
+ 				//print_r($Result->Themes->stThemes);
+				return $Result->Themes->stThemes;
+				
+			}
+		}
+		catch (SoapFault $Exception)
+		{
+			self::_log($Exception->getMessage());
+                        //Mage::getModel('core/session')->addError($Exception->getMessage());
+                        throw new Exception($Exception->getMessage());
+			return 'SOAP_EXCEPTION';
+		}
+	}
 	
 	public static function checkPreviewExists($strProjectID)
 	{
@@ -817,7 +871,70 @@ class Acegmbh_Flux_Helper_Data
                         throw new Exception($Exception->getMessage());
 			return 'SOAP_EXCEPTION';
 		}
-	}		
+	}
+	
+	public static function checkAccount($url,$eMail, $password, $themeId=1)
+	{
+		self::_log('checkAccount');
+		
+		$wsdl = $url;
+		$SoapClient = new SoapClient($wsdl, array('soap_version'=> SOAP_1_2,
+							  'trace'=> true,
+							  'classmap'=> array('CheckAccount' => 'Acegmbh_Flux_Model_Flux_Soap_Response_CheckAccount'),
+							  'cache_wsdl'	=> WSDL_CACHE_NONE
+							  )
+					   );
+		$soapRequest = array();
+		$soapRequest['EMail'] = $eMail;
+		$soapRequest['Password'] = $password;
+		$soapRequest['ThemeID']=$themeId;
+	
+		try
+		{
+			$Result = $SoapClient->__call('CheckAccount', array( 'parameters' => $soapRequest ) );
+	
+			self::_log('Request:');
+			self::_log( $SoapClient->__getLastRequest() );
+			self::_log('Response:');
+			self::_log( $SoapClient->__getLastResponse() );
+			
+			if($Result->CheckAccountResult == true )
+			{
+				return true;
+
+			}
+			else
+			{	$msg=self::_getAccountCheckError($Result->ErrorCode);
+				throw new Exception($msg);
+			}
+
+		}
+		catch (SoapFault $Exception)
+		{
+			self::_log($Exception->getMessage());
+                        throw new Exception($Exception->getMessage());
+			//return 'SOAP_EXCEPTION';
+		}
+	}	
+	
+	private static function _getAccountCheckError($errorCode)
+	{	$message=Mage::helper('core')->__("Unknow error.");
+		switch($errorCode)
+		{ case '-1':
+		  case -1:
+		  $message=Mage::helper('core')->__("FlickRocket User not found.");
+		  break;
+		  case '-2':
+		  case -2:
+		  $message=Mage::helper('core')->__("FlickRocket User valid but theme does not exist.");
+		  break;
+		  case '-3':
+		  case -3:
+		  $message=Mage::helper('core')->__("FlickRocket User valid but has no access rights to theme.");
+		  break;
+		}
+	     return $message;
+	}	
 	/** ***************************************************************************** **/
 	/** **************************** logging-functions ****************************** **/
 	/** ***************************************************************************** **/
@@ -913,5 +1030,51 @@ class Acegmbh_Flux_Helper_Data
 	public static function getFluxCustomerPassword()
 	{
 	     return isset($_SESSION['flux_customer_password'])?$_SESSION['flux_customer_password']:null;
+	}
+	
+	public static function hasOrderDigitalItems($Order)
+	{	$isDidgital = false;
+        	$countItems = 0;
+		$_Items = $Order->getAllItems();
+		foreach ($_Items as $_Item)
+		{
+			$productId = $_Item->getData('product_id');
+			$Product = Mage::getModel('catalog/product')->load($productId);
+			$projectId=$Product->getProjectId();
+			$licenseId=$Product->getLicenseId();
+		     	if(!empty($projectId) && !empty($licenseId))
+		     	{
+		     		$countItems++;
+		     		$isDidgital = true;
+		     	}
+		}
+		return $countItems == 0 ? false : $isDidgital;
+	
+	}
+	
+	public static function isDidgital()
+	{	
+		$isDidgital = false;
+        	$countItems = 0;
+		$quote = Mage::getModel('checkout/cart')->getQuote();
+		$_items=$quote->getAllItems();
+		foreach ($_items as $_item)
+		{
+			if ($_item->isDeleted()) {
+                	  continue;
+            		}
+            		
+			$productId = $_item->getData('product_id');
+			$product = Mage::getModel('catalog/product')->load($productId);
+			$projectId=$product->getProjectId();
+			$licenseId=$product->getLicenseId();
+			if (!empty($projectId) || !empty($licenseId)) {
+			     $isDidgital = true;
+			     $countItems++;
+				break;
+			    }
+		}
+		
+		return $countItems == 0 ? false : $isDidgital;
 	}
 }

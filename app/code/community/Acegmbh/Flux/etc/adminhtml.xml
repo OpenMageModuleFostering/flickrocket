@@ -1,5 +1,5 @@
 <config>
-	<menu>
+	<!--menu>
 		<sales>
 			<children>
 				<flux module="flux">
@@ -27,7 +27,7 @@
 				</flickrocket_upload>				
 			</children>
 		</flickrocket>
-	</menu>
+	</menu-->
 	<acl>
         <resources>
             <admin>
