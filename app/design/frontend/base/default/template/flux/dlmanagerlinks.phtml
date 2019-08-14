@@ -32,7 +32,27 @@
 
 <?php
 
+	function endsWith($haystack, $needle, $case = true) {
+		if ($case) {
+			return (strcmp(substr($haystack, strlen($haystack) - strlen($needle)), $needle) === 0);
+		}
+		return (strcasecmp(substr($haystack, strlen($haystack) - strlen($needle)), $needle) === 0);
+	}
+
 	$Customer = Mage::getModel('customer/customer')->load(Mage::getSingleton('customer/session')->getId());
-	echo "<iframe src=\"http://" . Mage::helper('flux')->prepareLoginEx( $Customer->getEmail(), $Customer->getPasswordHash()) . "&externaltype=1&theme=" . Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id') . "\" frameBorder=\"0\" width=\"100%\" height=\"1600px\"></iframe>";
+	
+	$targetURL = Mage::helper('flux')->prepareLoginEx( $Customer->getEmail(), $Customer->getPasswordHash()) . "&externaltype=1&theme=" . Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id');
+	$targetScheme = parse_url($targetURL, PHP_URL_SCHEME);
+	if (is_null($targetScheme))
+	{
+		$scheme = "http";
+		$host = parse_url($scheme . "://" . $targetURL, PHP_URL_HOST);
+		if (endsWith($host, ".flickrocket.com", false))
+			$scheme .= "s";
+		
+		$targetURL = $scheme . "://" . $targetURL;
+	}
+	
+	echo "<iframe src=\"" . $targetURL . "\" frameBorder=\"0\" width=\"100%\" height=\"1600px\"></iframe>";
 
 ?>

@@ -49,14 +49,14 @@ if ( Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl') == "http://sandbox.flic
 	
 	}
 	
-	$fluxURL = "http://sandbox.flickrocket.com/FlickRocketContentTools/?name=" . $fluxUser . "&password=" . $fluxPW . "&theme=1&type=1";
+	$fluxURL = "https://sandbox.flickrocket.com/FlickRocketContentTools/?name=" . $fluxUser . "&password=" . $fluxPW . "&theme=1&type=1";
 
 } else {
 
 	$livemode = true;
 	$fluxUser = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
 	$fluxPW = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
-	$fluxURL = "http://www.flickrocket.com/FlickRocketContentTools/?name=" . $fluxUser . "&password=" . $fluxPW . "&theme=1&type=1";
+	$fluxURL = "https://www.flickrocket.com/FlickRocketContentTools/?name=" . $fluxUser . "&password=" . $fluxPW . "&theme=1&type=1";
 	
 }
 
