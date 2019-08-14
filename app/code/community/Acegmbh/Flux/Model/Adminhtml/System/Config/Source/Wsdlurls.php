@@ -9,9 +9,9 @@ class Acegmbh_Flux_Model_Adminhtml_System_Config_Source_Wsdlurls
     public function toOptionArray()
     {
     	$arrReturn = array();
-   		$arrReturn[] = array(	'value' => 'http://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL',
+   		$arrReturn[] = array(	'value' => 'https://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL',
    								'label' => 'Sandbox');
-   		$arrReturn[] = array(	'value' => 'http://www.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL', 
+   		$arrReturn[] = array(	'value' => 'https://www.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL', 
    								'label' => 'Live');
 
 		return $arrReturn;

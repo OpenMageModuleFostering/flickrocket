@@ -37,19 +37,22 @@ class Acegmbh_Flux_Model_Observer
 		
 		$strEmail = $Customer->getEmail();
 		$strPassword = Mage::helper('flux')->getFluxCustomerPassword();//$_SESSION['flux_customer_password'];
-		$strHashedPw =Mage::getModel('customer/customer')->hashPassword($strPassword);
-		$iTransactionId = '99999' . $Customer->getId();
+		$strHashedPw = Mage::getModel('customer/customer')->hashPassword($strPassword);
+		$iTransactionId = 'FR-M1-'.$Customer->getId();
 		
 		self::_log('email: ' . $strEmail);
 		self::_log('transactionid: ' . $iTransactionId);
+
+		$FluxHelper = Mage::helper('flux');
+		$isDigital = $FluxHelper->hasOrderDigitalItems($Order);
 										
-		if( !empty($strPassword) )
+		if( !empty($strPassword) && $isDigital )
 		{
 			$strResultCreate = Mage::helper('flux')->createShopUser($iTransactionId,
 										$strEmail,
 										$strPassword,
 										false );
-			if( $strResultCreate=='OK' )
+			if( $strResultCreate == 'OK' )
 			{
 				// User erfolgreich neu angelegt, oder User mit gleichem Passwort bereits in Flux verfügbar
 			}
@@ -83,9 +86,7 @@ class Acegmbh_Flux_Model_Observer
 			}
 		}
 				
-		$FluxHelper = Mage::helper('flux');
-		$isDidgital=$FluxHelper->hasOrderDigitalItems($Order);
-		if($isDidgital)
+		if($isDigital)
 		{ 
 		  $FluxHelper->createShopOrder($Order);		
 		}
@@ -140,6 +141,79 @@ class Acegmbh_Flux_Model_Observer
 		}
 	}
 	
+	public function flickrocket_sync(Varien_Event_Observer $Observer)
+	{
+		self::_log('flickrocket_sync');
+
+        //get input params
+        $request = Mage::app()->getFrontController()->getRequest();
+        $fr_email = $request->getParam('email');
+		$fr_new_email = $request->getParam('new_email');
+		$fr_old_pw_hash = $request->getParam('old_pw_hash');
+		$fr_new_pw_hash = $request->getParam('new_pw_hash');
+		$fr_pw_hash_type = $request->getParam('pw_hash_type');
+		$fr_signature = $request->getParam('signature');
+
+
+		if ($fr_pw_hash_type == "6" && self::flux_check_signature($fr_email, $fr_new_email, $fr_old_pw_hash, $fr_new_pw_hash, $fr_pw_hash_type, $fr_signature))
+		{
+			$success = false;
+
+			$customer = Mage::getModel("customer/customer"); 
+			$customer->setWebsiteId(Mage::app()->getWebsite()->getId()); 
+			$customer->loadByEmail($fr_email);
+
+			if($customer->getId())
+			{
+				if ($fr_new_email != "" && $fr_new_email != $fr_email)
+				{
+					//Store new email
+					$customer->setEmail($fr_new_email);
+					$success = true;  
+				}
+				if ($fr_new_pw_hash != "")
+				{
+					//Store new password
+					$customer->setPassword($fr_new_pw_hash);
+					$success = true;  
+				}
+			}
+			if ($success)
+			{
+				$customer->save();
+		        $response = Mage::app()->getFrontController()->getResponse()
+					->clearHeaders()
+					->setHeader('HTTP/1.0', 200, true);			
+			}
+			else
+			{
+		        $response = Mage::app()->getFrontController()->getResponse()
+					->clearHeaders()
+					->setHeader('HTTP/1.0', 409, true);			
+			}
+		}
+		else
+		{
+		        $response = Mage::app()->getFrontController()->getResponse()
+					->clearHeaders()
+					->setHeader('HTTP/1.0', 405, true);	
+		}
+	}
+
+	function flux_check_signature($fr_email, $fr_new_email, $fr_old_pw_hash, $fr_new_pw_hash, $fr_pw_hash_type, $fr_signature) 
+	{
+		$returnval = false;
+
+		$fr_sync_secret = Mage::getStoreConfig('acegmbh_flux/sync/flux_syncsecret');
+		$fr_string_to_hash = $fr_sync_secret.":email=".$fr_email.":new_email=".$fr_new_email.":new_pw_hash=".$fr_new_pw_hash.":old_pw_hash=".$fr_old_pw_hash.":pw_hash_type=".$fr_pw_hash_type;
+		$fr_string_to_hash = utf8_encode ( $fr_string_to_hash);
+		$sha1 = sha1 ( $fr_string_to_hash );
+
+		if ($sha1 == $fr_signature) $returnval = true;
+
+		return $returnval;
+	}
+
 	public function checkFluxUser(Varien_Event_Observer $Observer)
 	{
 		self::_log('checkFluxUser');
@@ -230,25 +304,6 @@ class Acegmbh_Flux_Model_Observer
 			if((count($segments)==2 && $segments[1]!="MD") || count($segments)==1) 
 			{       $customer->setPassword($password);
 				$customer->save();
-				/*$result=Mage::helper('flux')->needChangePassword($customer->getEmail(),
-									     $password,
-									     false,
-									     $password,
-									     false );
-				
-				if($result==1)
-				{	
-				Mage::helper('flux')->changeCustomerPassword($customer->getEmail(),
-									     $password,
-									     false,
-									     $password,
-									     false );
-				}
-				if($result==2)
-				{    
-				   $iTransactionId = '99999' . $customer->getId();				
-				   Mage::helper('flux')->createShopUser($iTransactionId,$customer->getEmail(),$password);
-				}*/
 			}
 		}
 		return $this;
@@ -357,4 +412,109 @@ class Acegmbh_Flux_Model_Observer
 		}
 
 	}	
+	
+	public function flickrocket_wait(Varien_Event_Observer $Observer)
+	{
+		self::_log('flickrocket_wait');
+
+        //get input params
+        $request = Mage::app()->getFrontController()->getRequest();
+        $fr_flickrocket_wait = htmlspecialchars($request->getParam('flickrocket_wait'));
+		
+		if ($fr_flickrocket_wait != '')
+		{
+			$fr_flickrocket_wait = urldecode($fr_flickrocket_wait);
+			$response = Mage::app()->getFrontController()->getResponse();
+
+			$output_html = '
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+/* Center the loader */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 }
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom {
+  from{ bottom:-100px; opacity:0 }
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+</style>
+</head>
+<body onload="myFunction()" style="margin:0;">
+
+<div id="loader"></div>
+
+<div style="display:none;" id="myDiv" class="animate-bottom">
+  <h2>Tada!</h2>
+  <p>Some text in my newly loaded page..</p>
+</div>
+
+<script>
+var myVar;
+
+function myFunction() 
+{
+    myVar = setTimeout(showPage, 300);
+}
+
+function showPage() 
+{
+    window.location.href = "'.$fr_flickrocket_wait.'";
+}
+</script>
+
+</body>
+</html>';
+
+	        $response->clearBody();
+	        $response->setBody($output_html);
+			$response->sendResponse();
+			exit;
+		}
+
+	}
 }

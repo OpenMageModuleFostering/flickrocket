@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <config>
-
 	<modules>
 		<Acegmbh_Flux>
 			<version>0.1.8</version>
@@ -25,54 +24,49 @@
                 </flux>
             </updates>
         </layout>
-        
-     <events>
-    <checkout_submit_all_after>
-	<observers>
-		<Acegmbh_Flux>
-			<type>singleton</type>
-			<class>flux/observer</class>
-			<method>placeOrder</method>
-		</Acegmbh_Flux>
-	</observers>
-    </checkout_submit_all_after>	
-    
-    <adminhtml_catalog_product_edit_prepare_form>
-                <observers>
-                    <Acegmbh_Flux>
-                        <class>Acegmbh_Flux_Model_Observer_Template</class>
-                        <method>convertWizardButton</method>
-                    </Acegmbh_Flux>
-                    <Project_Option>
-                        <class>Acegmbh_Flux_Model_Observer_Template</class>
-                        <method>projectOption</method>
-                    </Project_Option>
-                </observers>
-   </adminhtml_catalog_product_edit_prepare_form>
-    
-  <model_config_data_save_before>
-  <observers>
-  	<Acegmbh_Flux>
-          <class>Acegmbh_Flux_Model_Observer_Config</class>
-          <method>validateAccountData</method>
-        </Acegmbh_Flux>
-  </observers>
-  </model_config_data_save_before>
-    		
-    		
-  <controller_action_layout_generate_blocks_after>
-                <observers>
-                    <Acegmbh_Flux_Js>
-                        <class>Acegmbh_Flux_Model_Observer_Template</class>
-                        <method>addJavascriptBlock</method>
-                    </Acegmbh_Flux_Js>
-                </observers>
-</controller_action_layout_generate_blocks_after>
- 						
-  </events>
-        
+		<events>
+			<checkout_submit_all_after>
+				<observers>
+					<Acegmbh_Flux>
+						<type>singleton</type>
+						<class>flux/observer</class>
+						<method>placeOrder</method>
+					</Acegmbh_Flux>
+				</observers>
+			</checkout_submit_all_after>	
+
+			<adminhtml_catalog_product_edit_prepare_form>
+				<observers>
+					<Acegmbh_Flux>
+						<class>Acegmbh_Flux_Model_Observer_Template</class>
+						<method>convertWizardButton</method>
+					</Acegmbh_Flux>
+					<Project_Option>
+						<class>Acegmbh_Flux_Model_Observer_Template</class>
+						<method>projectOption</method>
+					</Project_Option>
+				</observers>
+			</adminhtml_catalog_product_edit_prepare_form>
+		
+			<model_config_data_save_before>
+				<observers>
+					<Acegmbh_Flux>
+						<class>Acegmbh_Flux_Model_Observer_Config</class>
+						<method>validateAccountData</method>
+					</Acegmbh_Flux>
+				</observers>
+			</model_config_data_save_before>
+				
+			<controller_action_layout_generate_blocks_after>
+				<observers>
+					<Acegmbh_Flux_Js>
+						<class>Acegmbh_Flux_Model_Observer_Template</class>
+						<method>addJavascriptBlock</method>
+					</Acegmbh_Flux_Js>
+				</observers>
+			</controller_action_layout_generate_blocks_after>
+		</events>
 	</adminhtml>
- 	
 	<frontend>
 		<translate>
             <modules>
@@ -163,6 +157,24 @@
 			</flux>
 		</helpers>
 		<events>
+			<controller_front_init_routers>
+                <observers>
+                    <Acegmbh_Flux>
+                        <type>singleton</type>                          
+                        <class>flux/observer</class>
+                        <method>flickrocket_sync</method>
+                    </Acegmbh_Flux>
+                </observers>
+            </controller_front_init_routers>
+			<controller_front_init_routers>
+                <observers>
+                    <Acegmbh_Flux>
+                        <type>singleton</type>                          
+                        <class>flux/observer</class>
+                        <method>flickrocket_wait</method>
+                    </Acegmbh_Flux>
+                </observers>
+            </controller_front_init_routers>
 			<checkout_onepage_controller_success_action>
 				<observers>
 					<Acegmbh_Flux>
@@ -240,10 +252,8 @@
 					</Acegmbh_Flux>
 				</observers>
 			</controller_action_layout_load_before>
-			 										
 		</events>
-		
-		 <catalog>
+		<catalog>
             <product>
                 <type>
                     <bundle translate="label" module="bundle">
@@ -254,10 +264,6 @@
                 </type>
             </product>
         </catalog>
-		
-		
-		
-		
 	</global>
 	<default>
 	    <acegmbh_flux>
@@ -265,7 +271,7 @@
 	            <flux_theme_id>828</flux_theme_id>
 	            <flux_email>sandbox@flickrocket.com</flux_email>
 	            <flux_password>sandbox1971</flux_password>
-	            <flux_wsdl>http://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL</flux_wsdl>
+	            <flux_wsdl>https://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL</flux_wsdl>
 	            <flux_template>1</flux_template>
 	        </flux>
 	    </acegmbh_flux>

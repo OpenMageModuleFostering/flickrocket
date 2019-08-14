@@ -15,72 +15,133 @@
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
 			<groups>
+				<sandbox>
+					<label>Sandbox Settings</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>930</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+                    <fields>
+                        <flux_sandboxlabel>
+                            <label>Use this setting to switch between test mode and productive use.</label>
+                            <frontend_type>label</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </flux_sandboxlabel>                                                
+                        <flux_wsdl translate="label,comment">
+                            <label>Environment</label>
+                            <frontend_type>select</frontend_type>
+                            <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
+            				<source_model>
+			            	acegmbh_flux/adminhtml_system_config_source_wsdlurls
+			                </source_model>	
+                            <sort_order>41</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Note that the sandbox system is frequently reset and any data is deleted.</comment>
+                        </flux_wsdl>
+                    </fields>
+                </sandbox>
 				<flux translate="label">
-                    <label>Configuration</label>
+                    <label>Account Settings</label>
 					<frontend_type>text</frontend_type>
 					<sort_order>900</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>1</show_in_website>
 					<show_in_store>1</show_in_store>
                     <fields>
+                        <flux_accountlabel>
+                            <label>Enter your Flickrocket account data.</label>
+							<frontend_type>label</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </flux_accountlabel>
+                        <flux_email>
+                            <label>Email Address</label>
+                            <frontend_type>text</frontend_type>
+                            <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Email of registered FlickRocket shop owner with Shop Management permission</comment>
+                        </flux_email>
+                        <flux_password translate="label,comment">
+                            <label>Password</label>
+                            <frontend_type>password</frontend_type>
+                            <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>May be empty for generic sandbox environment</comment>
+                        </flux_password>
+					</fields>
+				</flux>
+				<theme>
+					<label>Theme Settings</label> 
+					<frontend_type>text</frontend_type>
+					<sort_order>910</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+                    <fields>
+                        <flux_themelabel>
+                            <label>Select the theme to use for the design (player selection)</label>
+                            <frontend_type>label</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </flux_themelabel>
                         <flux_theme_id translate="label,comment">
                             <label>Theme</label>
                             <frontend_type>select</frontend_type>
                             <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
                             <source_model>acegmbh_flux/adminhtml_system_config_source_themes</source_model>
                             <validate>required-entry</validate>
-                            <sort_order>31</sort_order>
+                            <sort_order>21</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment>Themes define the design and are managed in Flick Rocket.</comment>
                         </flux_theme_id>
-                        <flux_email translate="label,comment">
-                            <label>Email Address</label>
-                            <frontend_type>text</frontend_type>
-                            <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment>Email of user registered with FlickRocket with Shop Management permission</comment>
-                        </flux_email>
-                        <flux_password translate="label,comment">
-                            <label>Password</label>
-                            <frontend_type>password</frontend_type>
-                            <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
+					</fields>
+				</theme>
+				<sync>
+					<label>Sync Settings</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>920</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+                    <fields>
+                        <flux_synclabel>
+                            <label>Sync customer's email/password changes between Flickrocket and Magento</label>
+                            <frontend_type>label</frontend_type>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>May be empty for generic sandbox environment</comment>
-                        </flux_password>
-                        <flux_wsdl translate="label,comment">
-                            <label>Environment</label>
-                            <frontend_type>select</frontend_type>
-                            <backend_model>acegmbh_flux/flux_config_demo</backend_model> 
-				<source_model>
-				acegmbh_flux/adminhtml_system_config_source_wsdlurls
-			        </source_model>	
-                            <sort_order>40</sort_order>
+                        </flux_synclabel>
+                        <flux_syncsecret>
+                            <label>Sync secret</label>
+                            <frontend_type>password</frontend_type>
+                            <backend_model>acegmbh_flux/flux_config_demo</backend_model>
+                            <sort_order>31</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>Select between live (productive) and sandbox (testing)</comment>
-                        </flux_wsdl>
-                         <!--flux_template translate="label">
-                            <label>Access system</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>acegmbh_flux/adminhtml_system_config_source_access</source_model>
-                            <sort_order>50</sort_order>
-                            <comment>Show only FlickRocket based content or allow user to switch to legacy</comment>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </flux_template-->
-                        
-                    </fields>
-                </flux>
+                            <comment>Enter the same value here and in the FlickRocket Magento App</comment>
+                        </flux_syncsecret>
+					</fields>
+				</sync>
             </groups>
         </acegmbh_flux>
 	</sections>

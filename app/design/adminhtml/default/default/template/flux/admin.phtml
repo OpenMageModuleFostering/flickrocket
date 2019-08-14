@@ -26,7 +26,7 @@
 ?>
 <?php
 
-if ( Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl') == "http://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL"){
+if ( Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl') == "http://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL"){
 
 	$livemode = false;
 	if ("" == Mage::getStoreConfig('acegmbh_flux/flux/flux_email')){
@@ -57,15 +57,4 @@ if ( Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl') == "http://sandbox.flic
 	
 }
 
-
-
-if ($livemode){
-?>
-	<iframe src="https://www.flickrocket.com/App/Login.aspx?name=<?php echo $fluxUser;?>&password=<?php echo $fluxPW;?>&externaltype=1" width="100%" height="3000px">
-<?php	
-} else{
-?>
-	<iframe src="https://sandbox.flickrocket.com/App/Login.aspx?name=<?php echo $fluxUser;?>&password=<?php echo $fluxPW;?>&externaltype=1" width="100%" height="3000px">
-<?php	
-}
 ?>

@@ -64,7 +64,7 @@ class Acegmbh_Flux_Helper_Data
 		self::_log('changePassword');
 		
 		$customerId = $Customer->getId();
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
 		$SoapClient = new SoapClient($wsdl ,array('soap_version'	=> SOAP_1_2,
  							   'trace'		=> true,
  							   'classmap'		=> array(
@@ -137,7 +137,7 @@ class Acegmbh_Flux_Helper_Data
 		
 		$customerId = $Customer->getId();
 		
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
 		$SoapClient = new SoapClient($wsdl ,array('soap_version'	=> SOAP_1_2,
 							  'trace'		=> true,
 							  'classmap'		=> array(
@@ -162,7 +162,8 @@ class Acegmbh_Flux_Helper_Data
 		$_NewEmail = $Doc->createElement('NewEMail', $strNewEmail);
 		$_Customer->appendChild($_NewEmail);
 		
-		$Password = $Doc->createElement('PasswordHash', $Customer->getData("password_hash"));
+		//$Password = $Doc->createElement('PasswordHash', $Customer->getData("password_hash"));
+		$Password = $Doc->createElement('Password', self::getFluxCustomerPassword());
 		$_Customer->appendChild($Password);
 
 		$soapRequest['XML'] = $Doc->saveXML();
@@ -200,7 +201,7 @@ class Acegmbh_Flux_Helper_Data
 		$iIdCustomer = $Order->getCustomerId();
 		$Customer = Mage::getModel('customer/customer')->load($iIdCustomer);
 
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
 		$SoapClient = new SoapClient($wsdl, array('soap_version'=> SOAP_1_2,
 							  'trace'	=> true,
 							  'classmap'	=> array('CreateShopOrderResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_CreateShopOrder'),
@@ -220,7 +221,7 @@ class Acegmbh_Flux_Helper_Data
 		$TransactionID = $Doc->createElement('TransactionID', $Order->getRealOrderId());
 		$_Order->appendChild($TransactionID);
 		
-		$ThemeID = $Doc->createElement('ThemeID', Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id'));
+		$ThemeID = $Doc->createElement('ThemeID', Mage::getStoreConfig('acegmbh_flux/theme/flux_theme_id'));
 		$_Order->appendChild($ThemeID);
 		
 		$EMail = $Doc->createElement('EMail', $Customer->getEmail());
@@ -342,7 +343,7 @@ class Acegmbh_Flux_Helper_Data
 	{
 		self::_log('createShopUser');
 		
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
 		$SoapClient = new SoapClient($wsdl, array('soap_version'=> SOAP_1_2,
 							   'trace'	=> true,
 							   'classmap'	=> array('CreateShopOrderResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_CreateShopOrder'),
@@ -359,10 +360,10 @@ class Acegmbh_Flux_Helper_Data
 		$_Order = $Doc->createElement('Order');
 		$Doc->appendChild($_Order);
 	
-		$TransactionID = $Doc->createElement('TransactionID', '999999' . $iTransactionId);
+		$TransactionID = $Doc->createElement('TransactionID', 'FR-M1-' . $iTransactionId);
 		$_Order->appendChild($TransactionID);
 	
-		$ThemeID = $Doc->createElement('ThemeID', Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id'));
+		$ThemeID = $Doc->createElement('ThemeID', Mage::getStoreConfig('acegmbh_flux/theme/flux_theme_id'));
 		$_Order->appendChild($ThemeID);
 	
 		$EMail = $Doc->createElement('EMail', $strEmail);
@@ -419,7 +420,7 @@ class Acegmbh_Flux_Helper_Data
 		self::_log('checkUserExists');
 		
 		
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
 		$SoapClient = new SoapClient($wsdl, array('soap_version'	=> SOAP_1_2,
 							'trace'			=> true,
 							'classmap'		=> array('CheckUserExistsResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_CheckUserExists'),
@@ -485,78 +486,78 @@ class Acegmbh_Flux_Helper_Data
 	 * @param bool $bPwHash - true means, the password is given as a hash
 	 * @return 	0,1,2 or Error code;
 	 */
-	public static function needChangePassword($strEmail, $strPassword, $bPwHash = true )
-	{
-		self::_log('needChangePassword');
+	// public static function needChangePassword($strEmail, $strPassword, $bPwHash = true )
+	// {
+		// self::_log('needChangePassword');
 	
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
-		$SoapClient = new SoapClient($wsdl, array('soap_version'	=> SOAP_1_2,
-							'trace'			=> true,
-							'classmap'		=> array('CheckUserExistsResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_CheckUserExists'),
-							'cache_wsdl'	=> WSDL_CACHE_NONE
-							)
-					  );
+		// $wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
+		// $SoapClient = new SoapClient($wsdl, array('soap_version'	=> SOAP_1_2,
+							// 'trace'			=> true,
+							// 'classmap'		=> array('CheckUserExistsResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_CheckUserExists'),
+							// 'cache_wsdl'	=> WSDL_CACHE_NONE
+							// )
+					  // );
 	
-		$soapRequest = array();
-		$soapRequest['EMail'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
-		$soapRequest['Password'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
+		// $soapRequest = array();
+		// $soapRequest['EMail'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
+		// $soapRequest['Password'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
 	
-		$Doc = new DOMDocument('1.0', 'UTF-8');
-		$Doc->formatOutput = true;
-		$_Customer = $Doc->createElement('Customer');
-		$Doc->appendChild($_Customer);
+		// $Doc = new DOMDocument('1.0', 'UTF-8');
+		// $Doc->formatOutput = true;
+		// $_Customer = $Doc->createElement('Customer');
+		// $Doc->appendChild($_Customer);
 	
-		$EMail = $Doc->createElement('EMail', $strEmail);
-		$_Customer->appendChild($EMail);
+		// $EMail = $Doc->createElement('EMail', $strEmail);
+		// $_Customer->appendChild($EMail);
 	
-		if( $bPwHash )
-		{
-			$Password = $Doc->createElement('PasswordHash', $strPassword);
-			$_Customer->appendChild($Password);
-		}
-		else
-		{
-			$Password = $Doc->createElement('Password', $strPassword);
-			$_Customer->appendChild($Password);
-		}
+		// if( $bPwHash )
+		// {
+			// $Password = $Doc->createElement('PasswordHash', $strPassword);
+			// $_Customer->appendChild($Password);
+		// }
+		// else
+		// {
+			// $Password = $Doc->createElement('Password', $strPassword);
+			// $_Customer->appendChild($Password);
+		// }
 	
-		$soapRequest['XML'] = $Doc->saveXML();
-		try
-		{
-			$Result = $SoapClient->__call('CheckUserExists', array( 'parameters' => $soapRequest ) );
+		// $soapRequest['XML'] = $Doc->saveXML();
+		// try
+		// {
+			// $Result = $SoapClient->__call('CheckUserExists', array( 'parameters' => $soapRequest ) );
 			
-			self::_log('Request:');
-			self::_log( $SoapClient->__getLastRequest() );
-			self::_log('Response:');
-			self::_log( $SoapClient->__getLastResponse() );
-			/*$ap=$Result->CheckUserExistsResult;
-			ob_start();
-			var_dump($ap);
-			$res= ob_get_clean();
-			self::_log('Result:');
-			self::_log($res);*/
-			if( $Result->CheckUserExistsResult==1 && $Result->ErrorCode==0 )
-			{
-				return 0;//email and password are matched
-			}
-			if( $Result->ErrorCode==-5 )
-			{
-				return 1 ;//email matched but password not matched
-			}
-			if($Result->ErrorCode==-1)
-			{
-				return 2;// Invalid User
-			}
-			return $Result->ErrorCode;
+			// self::_log('Request:');
+			// self::_log( $SoapClient->__getLastRequest() );
+			// self::_log('Response:');
+			// self::_log( $SoapClient->__getLastResponse() );
+			// /*$ap=$Result->CheckUserExistsResult;
+			// ob_start();
+			// var_dump($ap);
+			// $res= ob_get_clean();
+			// self::_log('Result:');
+			// self::_log($res);*/
+			// if( $Result->CheckUserExistsResult==1 && $Result->ErrorCode==0 )
+			// {
+				// return 0;//email and password are matched
+			// }
+			// if( $Result->ErrorCode==-5 )
+			// {
+				// return 1 ;//email matched but password not matched
+			// }
+			// if($Result->ErrorCode==-1)
+			// {
+				// return 2;// Invalid User
+			// }
+			// return $Result->ErrorCode;
 						
-		}
-		catch (SoapFault $Exception)
-		{
-			self::_log($Exception->getMessage());
-                         throw new Exception($Exception->getMessage());
-			 return 'SOAP_EXCEPTION';
-		}
-	}
+		// }
+		// catch (SoapFault $Exception)
+		// {
+			// self::_log($Exception->getMessage());
+                         // throw new Exception($Exception->getMessage());
+			 // return 'SOAP_EXCEPTION';
+		// }
+	// }
 	
 	/**
 	 * 
@@ -578,7 +579,7 @@ class Acegmbh_Flux_Helper_Data
 	
 		self::_log('changeCustomerPassword');
 		
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
 		$SoapClient = new SoapClient( $wsdl, array('soap_version'=> SOAP_1_2,
 							    'trace'=> true,
 							    'classmap'=> array( 'ChangeCustomerPasswordResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_ChangeCustomerPassword' ),
@@ -653,7 +654,7 @@ class Acegmbh_Flux_Helper_Data
 	{
 		self::_log('getProjects');
 	
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
 		$SoapClient = new SoapClient($wsdl, array('soap_version'=> SOAP_1_2,
 							  'trace'	=> true,
 							  'classmap'	=> array('CheckUserExistsResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_GetProjects'),
@@ -664,7 +665,7 @@ class Acegmbh_Flux_Helper_Data
 		$soapRequest = array();
 		$soapRequest['EMail'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
 		$soapRequest['Password'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
-		$soapRequest['ThemeID'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id');
+		$soapRequest['ThemeID'] = Mage::getStoreConfig('acegmbh_flux/theme/flux_theme_id');
 	
 		$Doc = new DOMDocument('1.0', 'UTF-8');
 		$Doc->formatOutput = true;
@@ -722,7 +723,7 @@ class Acegmbh_Flux_Helper_Data
 	{
 		self::_log('getLicenses');
 		
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
 		$SoapClient = new SoapClient($wsdl, array('soap_version'	=> SOAP_1_2,
 							  'trace'		=> true,
 							  'classmap'		=> array('CheckUserExistsResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_GetLicenses'),
@@ -732,7 +733,7 @@ class Acegmbh_Flux_Helper_Data
 		$soapRequest = array();
 		$soapRequest['EMail'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
 		$soapRequest['Password'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
-		$soapRequest['ThemeID'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id');
+		$soapRequest['ThemeID'] = Mage::getStoreConfig('acegmbh_flux/theme/flux_theme_id');
 	
 		$Doc = new DOMDocument('1.0', 'UTF-8');
 		$Doc->formatOutput = true;
@@ -792,17 +793,21 @@ class Acegmbh_Flux_Helper_Data
 	{	
 		self::_log('getThemes');
 		
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
+		if ($wsdl == '')
+		{
+			$wsdl = 'https://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL';
+		}
 		$SoapClient = new SoapClient($wsdl, array('soap_version'	=> SOAP_1_2,
-							  'trace'		=> true,
-							  'classmap'		=> array('CheckUserExistsResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_GetThemes'),
-							   'cache_wsdl'	=> WSDL_CACHE_NONE
-							 )
-					   );
+							'trace'		=> true,
+							'classmap'		=> array('CheckUserExistsResponse' => 'Acegmbh_Flux_Model_Flux_Soap_Response_GetThemes'),
+							'cache_wsdl'	=> WSDL_CACHE_NONE
+							)
+					);
 		$soapRequest = array();
 		$soapRequest['EMail'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
 		$soapRequest['Password'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
-		//$soapRequest['ThemeID'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id');
+		//$soapRequest['ThemeID'] = Mage::getStoreConfig('acegmbh_flux/theme/flux_theme_id');
 	
 		$Doc = new DOMDocument('1.0', 'UTF-8');
 		$Doc->formatOutput = true;
@@ -818,7 +823,7 @@ class Acegmbh_Flux_Helper_Data
 			
 			if($Result->GetThemesResult==true && $Result->ErrorCode==0 )
 			{
- 				//print_r($Result->Themes->stThemes);
+				//print_r($Result->Themes->stThemes);
 				return $Result->Themes->stThemes;
 				
 			}
@@ -826,8 +831,8 @@ class Acegmbh_Flux_Helper_Data
 		catch (SoapFault $Exception)
 		{
 			self::_log($Exception->getMessage());
-                        //Mage::getModel('core/session')->addError($Exception->getMessage());
-                        throw new Exception($Exception->getMessage());
+						//Mage::getModel('core/session')->addError($Exception->getMessage());
+						throw new Exception($Exception->getMessage());
 			return 'SOAP_EXCEPTION';
 		}
 	}
@@ -836,7 +841,7 @@ class Acegmbh_Flux_Helper_Data
 	{
 		self::_log('checkPreviewExists');
 		
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
 		$SoapClient = new SoapClient($wsdl, array('soap_version'=> SOAP_1_2,
 							  'trace'=> true,
 							  'classmap'=> array('CheckPreviewExists' => 'Acegmbh_Flux_Model_Flux_Soap_Response_CheckPreviewExists'),
@@ -918,7 +923,7 @@ class Acegmbh_Flux_Helper_Data
 	}	
 	
 	private static function _getAccountCheckError($errorCode)
-	{	$message=Mage::helper('core')->__("Unknow error.");
+	{	$message=Mage::helper('core')->__("Unknown error.");
 		switch($errorCode)
 		{ case '-1':
 		  case -1:
@@ -959,9 +964,9 @@ class Acegmbh_Flux_Helper_Data
 		$FluxOrders->save();
 	}
 	
-	public  static function prepareLoginEx( $strCustomerMail, $strCustomerPasswordHash)
+	public  static function prepareLoginEx( $strCustomerMail, $strCustomerPassword)
 	{
-		$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+		$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
 		$SoapClient = new SoapClient( $wsdl, array('soap_version'=> SOAP_1_2,
 							   'trace'  	=> true,
 							   'classmap'	=> array( 'PrepareLogin' => 'Acegmbh_Flux_Model_Flux_Soap_Response_PrepareLogin' ),
@@ -972,7 +977,7 @@ class Acegmbh_Flux_Helper_Data
 		$soapRequest = array();
 		$soapRequest['EMail'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
 		$soapRequest['Password'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
-		$soapRequest['ThemeID'] = Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id');
+		$soapRequest['ThemeID'] = Mage::getStoreConfig('acegmbh_flux/theme/flux_theme_id');
 		
 		$Doc = new DOMDocument('1.0', 'UTF-8');
 		$Doc->formatOutput = true;
@@ -982,7 +987,7 @@ class Acegmbh_Flux_Helper_Data
 		$_EMail = $Doc->createElement('EMail',$strCustomerMail);
 		$_Customer->appendChild($_EMail);
 		
-		$_Password = $Doc->createElement('PasswordHash', $strCustomerPasswordHash);
+		$_Password = $Doc->createElement('Password', $strCustomerPassword);
 		
 		$_Customer->appendChild($_Password);
 		

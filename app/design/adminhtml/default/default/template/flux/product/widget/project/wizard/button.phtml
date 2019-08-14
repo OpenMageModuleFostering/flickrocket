@@ -3,7 +3,7 @@ $fluxPW =null;
 $fluxUser=null;
 $fluxURL ='#';
 
-if ( Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl') == "http://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL"){
+if ( Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl') == "https://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL"){
 
 	$livemode = false;
 	if ("" == Mage::getStoreConfig('acegmbh_flux/flux/flux_email')){
@@ -40,8 +40,8 @@ if ( Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl') == "http://sandbox.flic
 <tr>
     <td class="label"><label for="project_wizard"><?php echo $this->__('Product Wizard')?></label></td>
     <td class="value">
-        <button  class="scalable add" type="button" title="<?php echo $this->__('Product Wizard')?>" onclick='window.open("<?php echo $fluxURL ?>", "FlickRocket", "left=10,top=10,width=700,height=518,toolbar=0,resizable=1");' id="project_wizard"><span><span><span><?php echo $this->__('Product Wizard')?></span></span></span></button>  <p class="note">
-        <?php echo $this->__('Alternatively you can use the FlickRocket Content tools for desktop <a href="%s">Windows</a> / <a href="%s">MacOSX</a>',"http://www.flickrocket.com/app/download_components.aspx?component=FlickRocket Content Tools (Win)","http://www.flickrocket.com/app/download_components.aspx?component=FlickRocket Content Tools (Mac)")?>
+        <button  class="scalable add" type="button" title="<?php echo $this->__('Product Wizard')?>" onclick='window.open("https://contenttools.flickrocket.com", "FlickRocket", "left=10,top=10,width=700,height=518,toolbar=0,resizable=1");' id="project_wizard"><span><span><span><?php echo $this->__('Product Wizard')?></span></span></span></button>  <p class="note">
+        <?php echo $this->__('Alternatively you can use the FlickRocket Content Tools for desktop <a href="%s">Windows</a> / <a href="%s">MacOSX</a>',"https://admin.flickrocket.com/download_components.aspx?component=FlickRocket%20Content%20Tools%20(Win)","https://admin.flickrocket.com/download_components.aspx?component=FlickRocket%20Content%20Tools%20(Mac)")?>
         
 </p></td>
     </tr>

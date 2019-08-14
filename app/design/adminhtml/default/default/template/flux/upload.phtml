@@ -26,7 +26,7 @@
 ?>
 <?php
 
-if ( Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl') == "http://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL"){
+if ( Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl') == "https://sandbox.flickrocket.com/services/OnDemandOrder/Service.asmx?WSDL"){
 
 	$livemode = false;
 	if ("" == Mage::getStoreConfig('acegmbh_flux/flux/flux_email')){
@@ -49,14 +49,14 @@ if ( Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl') == "http://sandbox.flic
 	
 	}
 	
-	$fluxURL = "https://sandbox.flickrocket.com/FlickRocketContentTools/?name=" . $fluxUser . "&password=" . $fluxPW . "&theme=1&type=1";
+	$fluxURL = "https://contenttools.flickrocket.com";
 
 } else {
 
 	$livemode = true;
 	$fluxUser = Mage::getStoreConfig('acegmbh_flux/flux/flux_email');
 	$fluxPW = Mage::getStoreConfig('acegmbh_flux/flux/flux_password');
-	$fluxURL = "https://www.flickrocket.com/FlickRocketContentTools/?name=" . $fluxUser . "&password=" . $fluxPW . "&theme=1&type=1";
+	$fluxURL = "https://contenttools.flickrocket.com";
 	
 }
 
@@ -76,9 +76,9 @@ if ( Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl') == "http://sandbox.flic
 	<p><h3><?php echo Mage::helper('flux')->__('Content can be uploaded by using one of the following options:');?></h3></p>
 	<br />
 
-	<a href="<?php echo $fluxURL;?>&externaltype=1&theme=" . Mage::getStoreConfig('acegmbh_flux/flux/flux_theme_id')" onclick="return popup(this.href)"><img src="<?php echo $this->getSkinUrl('images/flux/CloudIcon_Html5.png') ?>" alt="Html5"></a>
+	<a href="https://contenttools.flickrocket.com" onclick="return popup(this.href)"><img src="<?php echo $this->getSkinUrl('images/flux/CloudIcon_Html5.png') ?>" alt="Html5"></a>
 	<p><h4><?php echo Mage::helper('flux')->__('Web based uploader');?></h4></p>
 
-	<a href="http://www.flickrocket.com/app/download_components.aspx?name=<?php echo $fluxUser; ?>&password=<?php echo $fluxPW ; ?>&component=FlickRocket" onclick="popup(this.href)"><img style="padding:5px;" src="<?php echo $this->getSkinUrl('images/flux/CloudIcon_Win.png') ?>" alt="Windows"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.flickrocket.com/app/download_components.aspx?name=<?php echo $fluxUser; ?>&password=<?php echo $fluxPW ; ?>&component=FlickRocket" onclick="popup(this.href)"><img style="padding:5px;" src="<?php echo $this->getSkinUrl('images/flux/CloudIcon_Apple.png') ?>" alt="Mac"></a>
+	<a href="https://admin.flickrocket.com/download_components.aspx?component=FlickRocket%20Content%20Tools%20(Win)" onclick="popup(this.href)"><img style="padding:5px;" src="<?php echo $this->getSkinUrl('images/flux/CloudIcon_Win.png') ?>" alt="Windows"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://admin.flickrocket.com/download_components.aspx?component=FlickRocket%20Content%20Tools%20(Mac)" onclick="popup(this.href)"><img style="padding:5px;" src="<?php echo $this->getSkinUrl('images/flux/CloudIcon_Apple.png') ?>" alt="Mac"></a>
 	<p><h4><?php echo Mage::helper('flux')->__('Download desktop software (Windows / MacOSX)');?></h4></p>	
 	</div>

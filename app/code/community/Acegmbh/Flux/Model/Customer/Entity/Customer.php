@@ -37,7 +37,7 @@ class Acegmbh_Flux_Model_Customer_Entity_Customer
 /*        
         if (Acegmbh_Flux_Model_Flux_Tools::isFluxUser($customerId))
         {
-			$wsdl = Mage::getStoreConfig('acegmbh_flux/flux/flux_wsdl');
+			$wsdl = Mage::getStoreConfig('acegmbh_flux/sandbox/flux_wsdl');
 			$SoapClient = new SoapClient($wsdl, 
 											array(
 													'soap_version'	=> SOAP_1_2,

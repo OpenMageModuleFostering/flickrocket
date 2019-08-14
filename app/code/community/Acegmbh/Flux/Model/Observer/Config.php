@@ -55,20 +55,20 @@ class Acegmbh_Flux_Model_Observer_Config
     
     protected function _getUrl()
     {
-    	if(isset($this->_groups['flux']['fields']['flux_wsdl']['value']))
+    	if(isset($this->_groups['sandbox']['fields']['flux_wsdl']['value']))
     	 {
-    	 	return $this->_groups['flux']['fields']['flux_wsdl']['value'];
+    	 	return $this->_groups['sandbox']['fields']['flux_wsdl']['value'];
     	 }
     	return null;
     }
     
     protected function _getThemeId()
     {
-    	if(isset($this->_groups['flux']['fields']['flux_theme_id']['value']))
+    	if(isset($this->_groups['theme']['fields']['flux_theme_id']['value']))
     	 {
-    	 	return $this->_groups['flux']['fields']['flux_theme_id']['value'];
+    	 	return $this->_groups['theme']['fields']['flux_theme_id']['value'];
     	 }
     	return null;
     }
-    
+
 }
