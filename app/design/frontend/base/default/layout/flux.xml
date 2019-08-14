@@ -33,11 +33,4 @@
 		    <block type="core/template" name="dlmlinks" template="flux/dlmanagerlinks.phtml"></block>
 		</reference>
     </downloadable_customer_products>
-	<PRODUCT_TYPE_downloadable translate="label">
-		<remove name="product.info.downloadable.samples"></remove>
-	        <reference name="product.info.downloadable.samples">
-                <block type="downloadable/catalog_product_samples" name="product.info.downloadable.samples" as="samples" template="flux/catalog/product/samples.phtml"/>
-            </block>
-        </reference>
-	</PRODUCT_TYPE_downloadable>		
 </layout>
