@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/Flickrocket",
+    "name": "OpenMageModuleFostering\/Flickrocket",
     "type": "magento-module",
     "license": "OSL-v3.0",
     "homepage": "",
     "description": "This extension enables you to sell and rent (optionally DRM protected) digital content such as DVDs (incl. all menus, bonus material, etc.), video (HD+SD), audio books, ebooks  (epub and PDF) and packaged content such as HTML, Flash, images, etc.",
     "authors": [
-    {
-        "name": "Volkmar Breitfeld",
-        "email": "volkmar@flickrocket.com"
-    }
-],
+        {
+            "name": "Volkmar Breitfeld",
+            "email": "volkmar@flickrocket.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
